@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROBITE | Your Cybernetic Companion</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Space Grotesk', sans-serif; background: #020617; overflow: hidden; margin: 0; }
+        .bg-grid { background-image: radial-gradient(#1e293b 1px, transparent 1px); background-size: 30px 30px; }
+        
+        /* THE ROBOT - Sleek and Interactive */
+        .robot-container { position: relative; width: 400px; height: 400px; cursor: pointer; transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        .robot-container:hover { transform: scale(1.05) translateY(-10px); }
+        
+        .robot-head { fill: #f8fafc; stroke: #e2e8f0; stroke-width: 2; transition: all 0.3s; }
+        .robot-eyes { fill: #38bdf8; transition: all 0.3s; box-shadow: 0 0 20px #38bdf8; }
+        
+        /* ANIMATIONS */
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+        .floating { animation: float 6s ease-in-out infinite; }
+        
+        @keyframes pulse-glow { 0% { box-shadow: 0 0 20px rgba(56, 189, 248, 0.2); } 50% { box-shadow: 0 0 60px rgba(56, 189, 248, 0.6); } 100% { box-shadow: 0 0 20px rgba(56, 189, 248, 0.2); } }
+        .listening { animation: pulse-glow 1.5s infinite; filter: drop-shadow(0 0 15px #38bdf8); }
+        
+        .thinking { animation: rotate 2s linear infinite; }
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        /* HUD ELEMENTS */
+        .hud-scan { position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: linear-gradient(90deg, transparent, #38bdf8, transparent); opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+        .is-active .hud-scan { opacity: 0.8; animation: scanning 2s linear infinite; }
+        @keyframes scanning { 0% { top: -20%; } 100% { top: 120%; } }
+
+        /* RESPONSE BUBBLE - Minimal and fast */
+        .response-overlay { position: absolute; bottom: 15%; left: 50%; transform: translateX(-50%); width: 80%; max-width: 600px; text-align: center; opacity: 0; transition: all 0.4s; z-index: 100; }
+        .response-overlay.show { opacity: 1; transform: translateX(-50%) translateY(-20px); }
+        
+        /* VOICE WAVES */
+        .voice-waves { display: flex; align-items: center; justify-content: center; gap: 4px; height: 40px; margin-top: 10px; }
+        .wave-bar { width: 4px; border-radius: 2px; background: #38bdf8; animation: sound-wave 1s infinite alternate; }
+        @keyframes sound-wave { 0% { height: 5px; } 100% { height: 35px; } }
+    </style>
+</head>
+<body class="h-screen flex items-center justify-center bg-grid">
+
+    <!-- HUD BACKGROUND -->
+    <div class="absolute inset-0 pointer-events-none overflow-hidden">
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-blue-500/10 rounded-full"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] border border-blue-500/5 rounded-full"></div>
+        <div class="absolute top-10 left-10 text-white/20 text-[10px] font-bold tracking-[4px] uppercase">
+            System Identity: ROBITE Core v3.0<br>
+            Neural Sync: Active
+        </div>
+    </div>
+
+    <!-- MAIN ROBOT INTERFACE -->
+    <div class="flex flex-col items-center justify-center p-4">
+        
+        <div id="robot-trigger" onclick="startRobiteVoice()" class="robot-container floating">
+            <div class="hud-scan"></div>
+            <!-- ROBOT SVG - Premium Minimalist Design -->
+            <svg viewBox="0 0 200 200" class="w-full h-full drop-shadow-[0_0_30px_rgba(56,189,248,0.2)]">
+                <!-- Body -->
+                <rect x="60" y="90" width="80" height="70" rx="40" class="fill-slate-800 stroke-[#38bdf8]/30 stroke-2" />
+                <rect x="75" y="110" width="50" height="30" rx="15" class="fill-slate-900 border border-[#38bdf8]/40" />
+                
+                <!-- Head -->
+                <circle cx="100" cy="70" r="45" class="robot-head fill-[#0f172a] stroke-[#38bdf8]/50 stroke-2" />
+                <!-- Screen Face -->
+                <rect x="75" y="55" width="50" height="30" rx="10" class="fill-[#020617]" />
+                <!-- Eyes -->
+                <circle id="eye-left" cx="88" cy="70" r="5" class="robot-eyes" />
+                <circle id="eye-right" cx="112" cy="70" r="5" class="robot-eyes" />
+                
+                <!-- Antennas / Audio Sensory -->
+                <line x1="100" y1="25" x2="100" y2="15" stroke="#38bdf8" stroke-width="3" stroke-linecap="round" class="opacity-50" />
+                <circle cx="100" cy="12" r="3" class="fill-[#38bdf8]" />
+            </svg>
+
+            <!-- Interactive Status Ring -->
+            <div id="status-ring" class="absolute inset-0 rounded-full border-4 border-[#38bdf8]/10 transition-all duration-500"></div>
+        </div>
+
+        <div id="instruction" class="mt-12 text-white/40 text-xs font-bold uppercase tracking-[5px] animate-pulse cursor-pointer" onclick="startRobiteVoice()">
+            Tap Robot to Start Contact
+        </div>
+    </div>
+
+    <!-- RESPONSE OVERLAY -->
+    <div id="response-panel" class="response-overlay">
+        <h2 id="response-text" class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-blue-100 to-blue-400 leading-tight">...</h2>
+        <div id="wave-container" class="voice-waves hidden">
+            <div class="wave-bar" style="animation-delay: 0.1s"></div>
+            <div class="wave-bar" style="animation-delay: 0.3s"></div>
+            <div class="wave-bar" style="animation-delay: 0.5s"></div>
+            <div class="wave-bar" style="animation-delay: 0.2s"></div>
+            <div class="wave-bar" style="animation-delay: 0.4s"></div>
+        </div>
+    </div>
+
+    <script>
+        let isActive = false;
+
+        function startRobiteVoice() {
+            if(isActive) return;
+            isActive = true;
+
+            const robot = document.getElementById('robot-trigger');
+            const eyes = document.querySelectorAll('.robot-eyes');
+            const panel = document.getElementById('response-panel');
+            const instr = document.getElementById('instruction');
+            const ring = document.getElementById('status-ring');
+
+            // Listening UI State
+            robot.classList.add('is-active', 'listening');
+            ring.classList.add('scale-110', 'border-[#38bdf8]/40');
+            eyes.forEach(e => e.classList.add('scale-150', 'duration-300'));
+            instr.innerText = "Listening System...";
+            instr.classList.add('text-blue-400');
+
+            // VOICE RECOGNITION (STT) - Enhanced for better matching
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                alert("Browser does not support Neural Link (Speech Recognition).");
+                resetUI();
+                return;
+            }
+
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'en-US';
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+            
+            recognition.onresult = async (event) => {
+                const transcript = event.results[0][0].transcript;
+                console.log(`ROBITE HEARD: ${transcript} (Confidence: ${event.results[0][0].confidence})`);
+                
+                instr.innerText = "Transmitting...";
+                instr.innerText = `Matched: "${transcript}"`;
+                
+                // SEND TO AI
+                try {
+                    const t1 = performance.now();
+                    const resp = await fetch("{{ url_for('tutor.live_chat') }}", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ message: transcript })
+                    });
+                    const data = await resp.json();
+                    const t2 = performance.now();
+                    console.log(`Neural Sync Speed: ${Math.round(t2-t1)}ms`);
+
+                    // Display Result
+                    displayResponse(data.response || "Communication Lost.", data.audio_url);
+                } catch (err) {
+                    displayResponse("Sync Error. Hardware trip.", null);
+                }
+            };
+
+            recognition.onspeechend = () => {
+                recognition.stop();
+            };
+
+            recognition.onerror = (event) => {
+                console.error("Neural Sync Error:", event.error);
+                instr.innerText = `Error: ${event.error}`;
+                setTimeout(resetUI, 2000);
+            };
+            
+            recognition.onend = () => { 
+                if(!isActive) resetUI(); 
+            };
+            
+            recognition.start();
+        }
+
+        function displayResponse(text, audioUrl) {
+            const panel = document.getElementById('response-panel');
+            const responseTxt = document.getElementById('response-text');
+            const waves = document.getElementById('wave-container');
+            const instr = document.getElementById('instruction');
+
+            responseTxt.innerText = text;
+            panel.classList.add('show');
+            instr.innerText = "Robite is Speaking";
+            waves.classList.remove('hidden');
+
+            if(audioUrl) {
+                const audio = new Audio(audioUrl);
+                audio.play();
+                audio.onended = () => {
+                    setTimeout(resetUI, 1000);
+                };
+            } else {
+                setTimeout(resetUI, 3000);
+            }
+        }
+
+        function resetUI() {
+            const robot = document.getElementById('robot-trigger');
+            const eyes = document.querySelectorAll('.robot-eyes');
+            const panel = document.getElementById('response-panel');
+            const instr = document.getElementById('instruction');
+            const ring = document.getElementById('status-ring');
+            const waves = document.getElementById('wave-container');
+
+            isActive = false;
+            robot.classList.remove('listening', 'is-active');
+            ring.classList.remove('scale-110', 'border-[#38bdf8]/40');
+            eyes.forEach(e => e.classList.remove('scale-150'));
+            panel.classList.remove('show');
+            waves.classList.add('hidden');
+            instr.innerText = "Tap Robot to Start Contact";
+            instr.classList.remove('text-blue-400');
+        }
+    </script>
+</body>
+</html>

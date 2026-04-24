@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+{% block title %}Dronacharya Hub — Learn · Research · Read{% endblock %}
+{% block content %}
+
+<!-- HERO -->
+<section style="background:linear-gradient(135deg,#0B1437 0%,#1a0533 50%,#112060 100%); background-size: 200% 200%; animation: gradient-shift 15s ease infinite;"
+  class="py-20 px-4 text-white text-center relative overflow-hidden">
+  <!-- Subtle Bokeh Overlay -->
+  <div class="absolute inset-0 opacity-20 pointer-events-none">
+    <div class="absolute top-10 left-10 w-64 h-64 bg-blue-500 rounded-full blur-[120px] animate-pulse"></div>
+    <div class="absolute bottom-10 right-10 w-96 h-96 bg-purple-600 rounded-full blur-[150px] animate-pulse"></div>
+  </div>
+
+  <div class="max-w-3xl mx-auto relative z-10">
+    <h1 style="font-family:'Cinzel',serif; font-size:clamp(32px,5vw,58px);" class="font-bold mb-6 leading-tight fade-in">
+      Your Complete<br>
+      <span
+        style="background:linear-gradient(to right,#F4A261,#FFD580);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">
+        Learning Platform
+      </span>
+    </h1>
+    <p class="hidden md:block text-gray-300 text-lg mb-10 max-w-xl mx-auto fade-in-1">
+      Three powerful tools — AI tutoring, instant survey papers, and a local book marketplace — all in one place.
+    </p>
+  </div>
+</section>
+
+<style>
+@keyframes gradient-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+</style>
+
+
+<!-- 4 PRODUCT CARDS -->
+<section class="max-w-7xl mx-auto px-4 -mt-10 pb-16">
+  <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+
+    <!-- Card 1: Tutor -->
+    <div class="card p-8 border-t-4 border-blue-500 fade-in fade-in-1">
+      <div class="text-5xl mb-4">🎓</div>
+      <h2 style="font-family:'Sora',sans-serif;" class="text-2xl font-bold text-gray-900 mb-3">Dronacharya Tutor</h2>
+      <p class="text-gray-500 mb-6 text-sm leading-relaxed">
+        Browse structured courses, watch YouTube lessons, take AI-generated quizzes, download study notes as DOCX, and
+        chat with your AI tutor.
+      </p>
+      <ul class="text-sm text-gray-500 mb-6 space-y-1">
+        <li>✅ AI Quiz Generator</li>
+        <li>✅ AI Chat Tutor</li>
+        <li>✅ Study Notes (DOCX)</li>
+        <li>✅ Course Progress Tracking</li>
+        <li>✅ Text-to-Speech Lessons</li>
+      </ul>
+      <a href="{{ url_for('tutor.welcome') }}"
+        class="btn-primary btn-tutor px-6 py-3 rounded-full inline-block font-semibold text-white">
+        Start Learning →
+      </a>
+    </div>
+
+    <!-- Card 2: Research -->
+    <div class="card p-8 border-t-4 border-violet-500 fade-in fade-in-2">
+      <div class="text-5xl mb-4">📄</div>
+      <h2 style="font-family:'Sora',sans-serif;" class="text-2xl font-bold text-gray-900 mb-3">Research Engine</h2>
+      <p class="text-gray-500 mb-6 text-sm leading-relaxed">
+        Generate complete structured survey papers on any topic in 12+ languages. Format citations in APA, MLA,
+        Chicago, IEEE. Download as PDF or DOCX.
+      </p>
+      <ul class="text-sm text-gray-500 mb-6 space-y-1">
+        <li>✅ Full Survey Papers</li>
+        <li>✅ 12+ Languages</li>
+        <li>✅ PDF & DOCX Download</li>
+        <li>✅ Citation Generator</li>
+        <li>✅ No Login Needed</li>
+      </ul>
+      <a href="{{ url_for('research.index') }}"
+        class="btn-primary btn-research px-6 py-3 rounded-full inline-block font-semibold text-white">
+        Generate Paper →
+      </a>
+    </div>
+
+    <!-- Card 3: Books -->
+    <div class="card p-8 border-t-4 border-green-600 fade-in fade-in-3">
+      <div class="text-5xl mb-4">📚</div>
+      <h2 style="font-family:'Sora',sans-serif;" class="text-2xl font-bold text-gray-900 mb-3">My Book</h2>
+      <p class="text-gray-500 mb-6 text-sm leading-relaxed">
+        Buy, sell, swap, or donate used books with people near you. Sellers pin their exact GPS location. Buyers find
+        books on a live map and contact sellers directly.
+      </p>
+      <ul class="text-sm text-gray-500 mb-6 space-y-1">
+        <li>✅ Live Map with Seller Pins</li>
+        <li>✅ GPS-Based Nearby Search</li>
+        <li>✅ WhatsApp & Call Seller</li>
+        <li>✅ Book Swap & Free Donate</li>
+        <li>✅ No Login Needed</li>
+      </ul>
+      <a href="{{ url_for('books.index') }}"
+        class="btn-primary btn-books px-6 py-3 rounded-full inline-block font-semibold text-white">
+        Find Books →
+      </a>
+    </div>
+
+
+    </div>
+
+  </div>
+  </div>
+</section>
+
+<!-- SEO Structured Article (> 300 words) -->
+<article class="hidden md:block max-w-7xl mx-auto px-4 py-20 text-gray-700 bg-white border-t border-gray-100">
+  <header class="text-center mb-12">
+    <h2 class="text-3xl md:text-4xl font-black text-gray-900 mb-4 tracking-tight leading-tight">Welcome to Dronacharya
+      Hub: Your Complete Educational Ecosystem</h2>
+    <p class="text-lg text-gray-500 max-w-3xl mx-auto">Discover an integrated platform where learning, research,
+      sharing, and cognitive development converge effortlessly.</p>
+  </header>
+
+  <div class="prose max-w-4xl mx-auto leading-relaxed text-gray-600">
+    <p class="mb-8 text-lg">
+      At <strong>Dronacharya Hub</strong>, we believe that education should be accessible, continuous, and highly
+      personalized for every learner. By integrating the latest advancements in artificial intelligence directly into
+      the learning experience, we have created a comprehensive platform designed to cater to modern students, educators,
+      and lifelong learners. Our platform is not just a study tool—it is an entire ecosystem built for intellectual
+      growth.
+    </p>
+
+    <section class="mb-10">
+      <h3 class="text-2xl font-bold text-gray-800 mb-4 border-l-4 border-blue-600 pl-4 py-1">1. Personalized AI Tutoring
+      </h3>
+      <p class="mb-4">
+        Gone are the days of struggling silently with difficult math problems, complex physics equations, or obscure
+        historical facts. Our flagship <em>AI Tutor</em> utilizes advanced AI capabilities to act as your personal
+        academic guide 24/7. With the interactive AI Camera tool, students can simply capture a photograph of a
+        handwritten math equation or a challenging textbook question. The platform's AI precisely scans the problem and
+        offers comprehensive, step-by-step explanatory breakdowns. This helps students grasp the underlying concepts
+        rather than just memorizing answers, enabling profound intellectual growth across disciplines including
+        mathematics, science, language arts, and humanities.
+      </p>
+    </section>
+
+    <section class="mb-10">
+      <h3 class="text-2xl font-bold text-gray-800 mb-4 border-l-4 border-violet-600 pl-4 py-1">2. Academic Research and
+        Instant Citations</h3>
+      <p class="mb-4">
+        Researching topics and formatting academic papers can be incredibly time-consuming. Dronacharya Hub
+        revolutionizes this process with our automated Survey Paper Generator. Tell the AI your thesis topic, select
+        your preferred citation style—whether it's APA, MLA, or IEEE—and watch as a structurally cohesive academic paper
+        is formulated instantaneously. The tool effortlessly manages bibliographies, in-text citations, and generates
+        content across 12+ globally recognized languages. Our platform provides academic scholars and university
+        students the ability to streamline their workflows, granting them more time to focus on essential critical
+        thinking and data analysis.
+      </p>
+    </section>
+
+    <section class="mb-10">
+      <h3 class="text-2xl font-bold text-gray-800 mb-4 border-l-4 border-green-600 pl-4 py-1">3. The Local Book
+        Marketplace</h3>
+      <p class="mb-4">
+        Physical books remain a cornerstone of the educational journey. Recognizing the need for affordability and
+        accessibility, we proudly feature a GPS-powered local book exchange. Sellers can list new or used books on a
+        live map, allowing local buyers to pinpoint the exact location and navigate effortlessly. Using our platform,
+        students can buy, sell, swap, or even donate books freely in their own community. Integrated communication
+        features permit instant WhatsApp chats and direct phone calls, empowering students with unparalleled financial
+        flexibility.
+      </p>
+    </section>
+
+    <section class="mb-10">
+      <h3 class="text-2xl font-bold text-gray-800 mb-4 border-l-4 border-amber-500 pl-4 py-1">4. Discovering
+        Scholarships</h3>
+      <p class="mb-4">
+        Financial barriers should never prevent a deserving bright mind from obtaining a top-tier education. Dronacharya
+        Hub curates a massive database of verified scholarships, tracking hundreds of financial support systems to help students prepare proactively and apply accurately.
+      </p>
+    </section>
+
+    </section>
+
+    <footer class="mt-12 p-6 bg-gray-50 rounded-2xl italic text-gray-500 border border-gray-100 text-sm">
+      <p>
+        Dronacharya Hub is committed to transforming how the world learns. By combining the power of artificial
+        intelligence, community resources, and unyielding support, we empower the leaders of tomorrow to reach their
+        maximum potential. Join us in shaping a brighter, smarter, and infinitely curious future.
+      </p>
+    </footer>
+  </div>
+</article>
+
+{% endblock %}
