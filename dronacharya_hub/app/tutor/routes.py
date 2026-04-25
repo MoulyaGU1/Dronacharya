@@ -1,4 +1,14 @@
-import os, json, uuid, random
+import os, sys, json, uuid, random
+
+# ── PATH FIX ──────────────────────────────────────────────────────
+# Ensures the project root (containing the `modules/` folder) is always
+# on sys.path, regardless of how Gunicorn resolves the working directory.
+_HERE = os.path.dirname(os.path.abspath(__file__))          # .../app/tutor/
+_ROOT = os.path.abspath(os.path.join(_HERE, '..', '..', '..'))  # .../src/
+if _ROOT not in sys.path:
+    sys.path.insert(0, _ROOT)
+# ─────────────────────────────────────────────────────────────────
+
 from concurrent.futures import ThreadPoolExecutor
 from flask import render_template, redirect, url_for, request, flash, jsonify, session, current_app, send_file
 from flask_login import login_user, logout_user, login_required, current_user
