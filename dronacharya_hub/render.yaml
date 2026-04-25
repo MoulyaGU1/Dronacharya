@@ -3,8 +3,10 @@ services:
     name: dronacharya-hub
     runtime: python
     buildCommand: pip install -r requirements.txt
-    releaseCommand: python -c "from app import app, db; with app.app_context(): db.create_all()"
-    startCommand: gunicorn -c gunicorn.conf.py main:app
+    # FIX: Use 'main' to avoid naming conflicts with the 'app/' folder
+    releaseCommand: python -c "from main import app, db; with app.app_context(): db.create_all()"
+    # FIX: Move configuration directly into the command line to avoid missing file errors
+    startCommand: gunicorn --timeout 120 --workers 2 --bind 0.0.0.0:$PORT main:app
     envVars:
       - key: PYTHON_VERSION
         value: 3.12.0
@@ -18,4 +20,3 @@ services:
         sync: false
       - key: SUPABASE_KEY
         sync: false
-
